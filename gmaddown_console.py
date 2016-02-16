@@ -50,6 +50,11 @@ parser.add_argument('--noextract', dest='noextract', help="Don't try extract the
 
 settings = vars(parser.parse_args())
 
+# Make sure that the temp directory exists
+d = os.path.dirname(settings["output"])
+if not os.path.exists(d):
+	os.makedirs(d)
+
 if settings["collectionid"] is None and settings["singleids"] is None:
 	print("You have to specify a collection id, or one or several single mod ids. See '--help'")
 	sys.exit()
