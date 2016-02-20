@@ -6,13 +6,8 @@
 
 # Changelog:
 # 2015-01-21 - Magnus Johnsson - Released v 0.001, which takes a statically coded collection id and downloads all the related gma files.
+# 2016-01-16 - Fixed numerous bugs, and made it actually usable. Released it to the public.
 # end changelog
-
-# TODO:
-# Add support for extracting gmad's
-# Handle errors
-# end todo
-
 
 import http.client
 import json
@@ -24,22 +19,16 @@ import os
 import subprocess
 from winreg import *
 
-# Open the registry, pray for it to find the gmad.exe place. Can't redistribute it, so sad, so sad.
-
-gmadexe = "gmad.exe"
-
-aReg = ConnectRegistry(None,HKEY_LOCAL_MACHINE)
-
-# See if we can find GMOD's location from the uninstall information:
-aKey = OpenKey(aReg, r"SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Uninstall\Steam App 4000")
-repr(aKey)
+gmadexe = ""
 try:
-	gmadexe = QueryValueEx(aKey, "InstallLocation")
-	if gmadexe[1] == REG_SZ: # Success!
-		gmadexe = gmadexe[0] + r"\bin\gmad.exe"
-except EnvironmentError as e:
-	print(e)
+	# This file should have been generated  by guess_gmad_location.py :). Should contain the path to gmad.exe
+	with open("gmad_path_best_guess.txt", "r") as gmadread:
+		gmadexe = gmadread.read()
+except:
+	pass
 
+if gmadexe == "":
+	print("Sorry, but gmad_path_best_guess.txt does not exist! Run guess_gmad_location.py or create manually with only the path to gmad.exe as content!")
 # First we parse the command line options
 
 parser = argparse.ArgumentParser(description='Tool for downloading gmad files')
