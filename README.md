@@ -1,5 +1,5 @@
 # gmadget
-A tool for getting steam workshop collections downloaded locally.
+A tool for getting garrys mod steam workshop collections downloaded locally.
 
 ## Usage
 
